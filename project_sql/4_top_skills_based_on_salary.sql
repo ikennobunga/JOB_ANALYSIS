@@ -1,28 +1,3 @@
-SELECT
-  skills_dim.skills,
-  ROUND(
-    AVG(job_postings_fact.salary_year_avg),
-    0
-    ) AS avg_yearly_salary
-FROM
-  job_postings_fact
-  INNER JOIN
-    skills_job_dim
-    ON job_postings_fact.job_id = skills_job_dim.job_id
-  INNER JOIN
-    skills_dim
-    ON skills_job_dim.skill_id = skills_dim.skill_id
-WHERE
-  job_title_short = 'Data Analyst'
-  AND salary_year_avg IS NOT NULL
-GROUP BY
-  skills_dim.skills
-ORDER BY
-  avg_yearly_salary DESC
-LIMIT 25
-
-
-
 /*--
 Here are the paying skills for data analysts, the top 25, can you provide some quick insights into some trends in the top-paying jobs
 
@@ -45,3 +20,26 @@ Key Trends in Top-Paying Data Analyst Skills
 	•	The diverse range of skills also includes industry-specific applications like Twilio ($138,500) for communication APIs and Ansible ($124,370) for IT automation.
 Overall, these trends illustrate a strong demand for specialized technical skills across various domains within data analytics. The focus is on advanced programming languages, AI frameworks, data management tools, and collaborative platforms that enhance productivity and innovation in data-driven environments.
 */
+
+
+SELECT
+  skills_dim.skills,
+  ROUND(AVG(job_postings_fact.salary_year_avg), 1) AS avg_yearly_salary
+FROM
+  job_postings_fact
+  INNER JOIN
+    skills_job_dim
+    ON job_postings_fact.job_id = skills_job_dim.job_id
+  INNER JOIN
+    skills_dim
+    ON skills_job_dim.skill_id = skills_dim.skill_id
+WHERE
+  job_title_short = 'Data Analyst'
+  AND salary_year_avg IS NOT NULL
+GROUP BY
+  skills_dim.skills
+ORDER BY
+  avg_yearly_salary DESC
+LIMIT 25;
+
+
